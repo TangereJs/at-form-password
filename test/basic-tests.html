@@ -129,7 +129,7 @@
       test('errorMessage => valid = false', function() {
         var input = fixture('errorMessageValidFalse');
         assert.equal(input.errorMessage, 'demo error message', 'error message is correctly set');
-        assert.equal(input.valid, true, 'input is valid because error message is set as attribute');
+        assert.equal(input.valid, false, 'input is valid because error message is set as attribute');
         input.errorMessage = 'Another version of demo error message';
         assert.equal(input.errorMessage, 'Another version of demo error message', 'error message is correctly set');
         assert.equal(input.valid, false, 'input is invalid because error message is set as property');
@@ -157,18 +157,20 @@
       });
 
       function GenericInvalidMaxCharsTestFunction(input, maxCharsValues) {
+        var hint = Polymer.dom(input.$.hint);
         for (var i = 0; i < maxCharsValues.length; i++) {
           var maxCharsValue = maxCharsValues[i];
           input.maxChars = maxCharsValue;
 
           assert.equal(input.maxChars, maxCharsValue, 'maxChars should be NaN');
-          assert.equal(input.valid, true, 'at-form-password is not valid');
-          assert.equal(input._errorMessage, "", 'at-form-password _errorMessage is not empty');
+          assert.equal(input.validate(true), false, 'at-form-password is not valid');
+          assert.equal(hint.innerHTML, input.T("schema.maxChars is not a number value."), 'at-form-password errorMessage is not empty');
         }
       };
 
       test('max chars test', function () {
         var input = fixture('maxChars');
+        var hint = Polymer.dom(input.$.hint);
 
         input.value = "This text contains 33 characters."
 
@@ -177,18 +179,18 @@
 
         input.maxChars = -45;
         assert.equal(input.maxChars, -45, 'maxChars should be -45');
-        assert.equal(input.valid, true, 'at-form-password is not valid');
-        assert.equal(input._errorMessage, "", 'at-form-password _errorMessage is not empty');
+        assert.equal(input.validate(true), true, 'at-form-password is not valid');
+        assert.equal(hint.textContent, "", 'at-form-password _errorMessage is not empty');
 
         input.maxChars = 16;
         assert.equal(input.maxChars, 16, 'maxChars should be 16');
-        assert.equal(input.valid, false, 'at-form-password is not invalid');
-        assert.equal(input._errorMessage, input.T("You can not enter more than {0} characters.", 16), 'at-form-password _errorMessage is not set correctly');
+        assert.equal(input.validate(true), false, 'at-form-password is not invalid');
+        assert.equal(hint.textContent, input.T("You can not enter more than {0} characters.", 16), 'at-form-password _errorMessage is not set correctly');
 
         input.maxChars = 36;
         assert.equal(input.maxChars, 36, 'maxChars should be 36');
-        assert.equal(input.valid, true, 'at-form-password is not valid');
-        assert.equal(input._errorMessage, "", 'at-form-password _errorMessage is not empty');
+        assert.equal(input.validate(true), true, 'at-form-password is not valid');
+        assert.equal(hint.textContent, "", 'at-form-password _errorMessage is not empty');
       });
 
     });
