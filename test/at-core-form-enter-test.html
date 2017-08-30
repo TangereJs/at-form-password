@@ -34,7 +34,8 @@
         return {
           properties: {
             text1: {
-              type: 'string'
+              type: 'string',
+              xtype: 'password'
             }
           }
         };
@@ -64,13 +65,13 @@
          * form.validate() will call validate() of all elements, so at-form-password.validate() should be adjusted
          */
         var coreForm = fixture('coreFormEnterValidateOnKeypress');
-        coreForm.schema = getSchema();
-        coreForm.data = getData();
-
-        assert.equal(schemaHelpers.areEqual(coreForm.schema, getSchema()), true, 'schema not set correctly');
-        assert.equal(schemaHelpers.areEqual(coreForm.data, getData()), true, 'data not set correctly');
 
         coreForm.addEventListener('rendered', function(){
+          coreForm.data = getData();
+
+          assert.equal(schemaHelpers.areEqual(coreForm.schema, getSchema()), true, 'schema not set correctly');
+          assert.equal(schemaHelpers.areEqual(coreForm.data, getData()), true, 'data not set correctly');
+
           var textInput = coreForm.getElement('text1');
           var inputProvider = textInput._getFocusableElement();
 
@@ -130,6 +131,8 @@
 
           MockInteractions.keyEventOn(inputProvider, 'keypress', 13, 'ENTER');
         });
+
+        coreForm.schema = getSchema();
       });
 
 
@@ -143,13 +146,13 @@
          * form.validate() will call validate() of all elements, so at-form-password.validate() should be adjusted
          */
         var coreForm = fixture('coreFormEnterValidateOnKeypress');
-        coreForm.schema = getSchema();
-        coreForm.data = getData();
-
-        assert.equal(schemaHelpers.areEqual(coreForm.schema, getSchema()), true, 'schema not set correctly');
-        assert.equal(schemaHelpers.areEqual(coreForm.data, getData()), true, 'data not set correctly');
 
         coreForm.addEventListener('rendered', function(){
+          coreForm.data = getData();
+
+          assert.equal(schemaHelpers.areEqual(coreForm.schema, getSchema()), true, 'schema not set correctly');
+          assert.equal(schemaHelpers.areEqual(coreForm.data, getData()), true, 'data not set correctly');
+          
           var textInput = coreForm.getElement('text1');
           var inputProvider = textInput._getFocusableElement();
 
@@ -190,6 +193,8 @@
 
           MockInteractions.keyEventOn(inputProvider, 'keypress', 13, 'ENTER');
         });
+
+        coreForm.schema = getSchema();
       });
 
     });
